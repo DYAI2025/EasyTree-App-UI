@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --surface-canvas: #050505;
+    --surface-app: #0B0C0B;
+    --surface-shell: #141713;
+    --surface-panel: #1C201C;
+    --surface-raised: #272822;
+    --surface-hover: #303129;
+
+    --wood-gold: #D6A875;
+    --wood-amber: #C48A4A;
+    --wood-birch: #E8D2B5;
+    --wood-walnut: #6A4934;
+    --wood-oak: #49372B;
+
+    --border-groove: #080908;
+    --border-subtle: #34332D;
+    --border-wood: #4A3B2F;
+
+    --text-primary: #F1E8DC;
+    --text-secondary: #C2B3A0;
+    --text-muted: #918577;
+    --text-on-gold: #2B211A;
+
+    --accent-forest: #55735B;
+    --accent-moss: #7D8B55;
+    --accent-amber: #C48A4A;
+    --accent-red: #B8413D;
+    --accent-red-border: #8E2F2C;
+    --accent-green-border: #3A523F;
+    --accent-information: #5B7E86;
+  }
+
+  body {
+    background-color: var(--surface-canvas);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Wood grain subtle background texture pattern */
+.wood-grain-overlay {
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(214, 168, 117, 0.015) 0px,
+    rgba(214, 168, 117, 0.015) 1px,
+    transparent 1px,
+    transparent 8px
+  );
+}
+
+.charred-wood-card {
+  background: #1C201C;
+  border: 1px solid #34332D;
+  border-radius: 20px;
+}
+
+.charred-wood-panel {
+  background: #141713;
+  border: 1px solid #34332D;
+  border-radius: 20px;
+}
+
+.wood-edge-accent {
+  position: relative;
+}
+.wood-edge-accent::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #D6A875 0%, #6A4934 100%);
+  border-top-left-radius: inherit;
+  border-bottom-left-radius: inherit;
+}
+
+/* Custom scrollbar styling for compact mobile containers */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #141713;
+}
+::-webkit-scrollbar-thumb {
+  background: #34332D;
+  border-radius: 2px;
+}
+

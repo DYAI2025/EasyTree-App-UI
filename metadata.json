@@ -1,0 +1,6 @@
+{
+  "name": "Arboscus Teamplaner",
+  "description": "Einsatzplanungs-PWA für Baumpflege-Teams (Timber Operations)",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

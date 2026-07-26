@@ -11,6 +11,7 @@ import { DamageReportModal } from './views/DamageReportModal';
 import { AbsenceView } from './views/AbsenceView';
 import { ProfileView } from './views/ProfileView';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { vibrateStartTimer, vibrateStopTimer, vibrateSubmitDamage } from './utils/haptics';
 
 import {
   currentUser,
@@ -39,11 +40,38 @@ const STORAGE_KEYS = {
   DAMAGES: 'arboscus_damages_v1',
   ABSENCES: 'arboscus_absences_v1',
   OFFLINE: 'arboscus_offline_mode_v1',
-  ONBOARDING: 'arboscus_onboarding_seen_v1'
+  ONBOARDING: 'arboscus_onboarding_seen_v1',
+  THEME: 'arboscus_theme_v1'
 };
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab | 'baustelle'>('heute');
+
+  // Dark/Light Theme state
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    const saved = localStorage.getItem(STORAGE_KEYS.THEME);
+    return saved !== null ? saved === 'dark' : true;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.THEME, isDarkMode ? 'dark' : 'light');
+    if (isDarkMode) {
+      document.documentElement.classList.remove('light');
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
+    }
+  }, [isDarkMode]);
+
+  const handleToggleDarkMode = () => {
+    setIsDarkMode(prev => !prev);
+    triggerToast(
+      !isDarkMode ? 'Dunkelmodus aktiv' : 'Hellmodus (#E9F4EA)',
+      !isDarkMode ? 'Dunkles Design geladen.' : 'Helles Design mit transparenten Kontrasten geladen.',
+      'info'
+    );
+  };
 
   // Onboarding state
   const [showOnboarding, setShowOnboarding] = useState<boolean>(() => {
@@ -190,6 +218,7 @@ export default function App() {
       triggerToast('Aktion gesperrt', 'Im Offline-Modus können keine Timer gestartet werden.', 'warning');
       return;
     }
+    vibrateStartTimer();
     const nowStr = new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' Uhr';
     setTimer((prev) => ({
       ...prev,
@@ -206,6 +235,7 @@ export default function App() {
       triggerToast('Aktion gesperrt', 'Im Offline-Modus können keine Timer gestoppt werden.', 'warning');
       return;
     }
+    vibrateStopTimer();
     const stopTimeStr = new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) + ' Uhr';
     const hours = Math.floor(timer.elapsedSeconds / 3600);
     const minutes = Math.floor((timer.elapsedSeconds % 3600) / 60);
@@ -298,6 +328,7 @@ export default function App() {
 
   // Damage Submit
   const handleSubmitDamageReport = (report: DamageReport) => {
+    vibrateSubmitDamage();
     setDamageReports((prev) => [report, ...prev]);
     setShowDamageModal(false);
     triggerToast(
@@ -346,9 +377,9 @@ export default function App() {
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
-    <div className="min-h-screen bg-[#050505] text-[#F1E8DC] font-sans antialiased flex items-center justify-center sm:p-4">
+    <div className={`min-h-screen ${isDarkMode ? 'dark bg-[#050505] text-[#F1E8DC]' : 'light bg-[#D1E5D3] text-[#182418]'} font-sans antialiased flex items-center justify-center sm:p-4 transition-colors duration-300`}>
       {/* Mobile Device Canvas Container */}
-      <main className="w-full max-w-[410px] min-h-screen sm:min-h-[820px] sm:h-[820px] bg-[#0B0C0B] sm:rounded-[48px] border-0 sm:border-[10px] sm:border-[#1C201C] shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col relative overflow-hidden">
+      <main className={`w-full max-w-[410px] min-h-screen sm:min-h-[820px] sm:h-[820px] ${isDarkMode ? 'bg-[#0B0C0B] sm:border-[#1C201C]' : 'bg-[#E9F4EA] sm:border-[#97B89A]'} sm:rounded-[48px] border-0 sm:border-[10px] shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col relative overflow-hidden transition-colors duration-300`}>
 
         {/* App Top Bar */}
         <TopBar
@@ -357,6 +388,8 @@ export default function App() {
           unreadCount={unreadCount}
           isOffline={isOffline}
           lastSynced={currentUser.lastSynced}
+          isDarkMode={isDarkMode}
+          onToggleDarkMode={handleToggleDarkMode}
           onOpenNotifications={() => setActiveTab('meldungen')}
           onOpenProfile={() => setActiveTab('profil')}
         />
@@ -436,6 +469,8 @@ export default function App() {
             {activeTab === 'profil' && (
               <ProfileView
                 isOffline={isOffline}
+                isDarkMode={isDarkMode}
+                onToggleDarkMode={handleToggleDarkMode}
                 onToggleOffline={handleToggleOffline}
                 onResetDemoState={handleResetDemoState}
                 onStartOnboarding={handleStartOnboarding}

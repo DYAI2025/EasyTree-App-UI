@@ -10,13 +10,18 @@ import {
   Info,
   CheckCircle2,
   Lock,
-  Compass
+  Compass,
+  Sun,
+  Moon,
+  Palette
 } from 'lucide-react';
 import { HexBadge } from '../components/HexBadge';
 import { currentUser } from '../mockData';
 
 interface ProfileViewProps {
   isOffline: boolean;
+  isDarkMode?: boolean;
+  onToggleDarkMode?: () => void;
   onToggleOffline: () => void;
   onResetDemoState: () => void;
   onStartOnboarding: () => void;
@@ -25,6 +30,8 @@ interface ProfileViewProps {
 
 export const ProfileView: React.FC<ProfileViewProps> = ({
   isOffline,
+  isDarkMode = true,
+  onToggleDarkMode,
   onToggleOffline,
   onResetDemoState,
   onStartOnboarding,
@@ -64,6 +71,67 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Dark / Light Mode Toggle Card */}
+      {onToggleDarkMode && (
+        <div className="bg-[#1C201C] p-4 rounded-[20px] border border-[#34332D] space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 bg-[#272822] text-[#D6A875] rounded-xl border border-[#34332D]">
+                <Palette className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-xs font-bold text-[#F1E8DC] uppercase tracking-wider">Farbschema & Modus</h3>
+                <p className="text-[11px] text-[#918577]">Wechsle zwischen Dunkel- und Hellmodus</p>
+              </div>
+            </div>
+
+            <button
+              onClick={onToggleDarkMode}
+              className={`w-14 h-7 rounded-full p-1 transition-all duration-300 relative cursor-pointer ${
+                isDarkMode ? 'bg-[#34332D] border border-[#4A3B2F]' : 'bg-[#7D8B55] border border-[#97B89A]'
+              }`}
+              aria-label="Farbschema umschalten"
+            >
+              <div
+                className={`w-5 h-5 rounded-full flex items-center justify-center transition-transform duration-300 shadow-sm ${
+                  isDarkMode
+                    ? 'translate-x-0 bg-[#D6A875] text-[#2B211A]'
+                    : 'translate-x-7 bg-[#E9F4EA] text-[#3B4A3B]'
+                }`}
+              >
+                {isDarkMode ? <Moon className="w-3 h-3" /> : <Sun className="w-3 h-3" />}
+              </div>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2 pt-1">
+            <button
+              onClick={() => isDarkMode || onToggleDarkMode()}
+              className={`p-2.5 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                isDarkMode
+                  ? 'bg-[#272822] text-[#D6A875] border-[#D6A875]/60 shadow-sm'
+                  : 'bg-[#141713] text-[#918577] border-[#34332D] hover:text-[#F1E8DC]'
+              }`}
+            >
+              <Moon className="w-3.5 h-3.5" />
+              <span>Dunkelmodus</span>
+            </button>
+
+            <button
+              onClick={() => isDarkMode && onToggleDarkMode()}
+              className={`p-2.5 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 transition-all ${
+                !isDarkMode
+                  ? 'bg-[#E9F4EA] text-[#3B4A3B] border-[#7D8B55] shadow-sm'
+                  : 'bg-[#141713] text-[#918577] border-[#34332D] hover:text-[#F1E8DC]'
+              }`}
+            >
+              <Sun className="w-3.5 h-3.5 text-[#A6631E]" />
+              <span>Hellmodus (#E9F4EA)</span>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Interactive Tour & Onboarding Section */}
       <div className="bg-[#1C201C] p-4 rounded-[20px] border border-[#34332D] space-y-3">
@@ -160,3 +228,4 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
     </div>
   );
 };
+

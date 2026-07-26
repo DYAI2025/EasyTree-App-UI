@@ -17,6 +17,7 @@ import {
 import { Assignment, ChecklistItem, TimerState } from '../types';
 import { TimerWidget } from '../components/TimerWidget';
 import { WeatherCard } from '../components/WeatherCard';
+import { SiteWeatherWidget } from '../components/SiteWeatherWidget';
 
 interface TodayViewProps {
   assignment: Assignment;
@@ -167,35 +168,13 @@ export const TodayView: React.FC<TodayViewProps> = ({
         </div>
       </section>
 
-      {/* B. Weather Warning Card */}
-      <section className="bg-[#1C201C] rounded-[20px] p-4 border border-[#34332D] flex items-center justify-between gap-2 shadow-xs">
-        <div className="flex items-center gap-3">
-          <div className="text-[#C48A4A] shrink-0">
-            <AlertTriangle className="w-6 h-6" />
-          </div>
-          <div>
-            <p className="text-[10px] uppercase text-[#918577] tracking-widest font-semibold">Wetterwarnung</p>
-            <p className="text-sm font-bold text-[#F1E8DC]">
-              {typeof assignment.weather.warning === 'string'
-                ? assignment.weather.warning
-                : assignment.weather.warning?.event
-                ? `${assignment.weather.warning.event} (Stufe ${assignment.weather.warning.level || 2})`
-                : 'Windböen (Stufe 2)'}
-            </p>
-            <p className="text-[11px] text-[#C2B3A0]">
-              {typeof assignment.weather.warning === 'object' && assignment.weather.warning?.validTo
-                ? `Gültig bis ${assignment.weather.warning.validTo} • Max. ${assignment.weather.tempMax}°C`
-                : `Gültig bis 18:00 Uhr • Max. ${assignment.weather.tempMax}°C`}
-            </p>
-          </div>
-        </div>
-        <button
-          onClick={onOpenSiteDetail}
-          className="min-h-[48px] min-w-[56px] px-3.5 py-2.5 rounded-xl bg-[#C48A4A] hover:bg-[#B3793B] text-[#2B211A] text-xs font-extrabold uppercase tracking-wider shrink-0 flex items-center justify-center active:scale-95 transition-all shadow-xs"
-        >
-          Details
-        </button>
-      </section>
+      {/* B. Baustellenwetter & Arbeitssicherheit Widget */}
+      <SiteWeatherWidget
+        weather={assignment.weather}
+        siteName={assignment.siteName}
+        address={assignment.address}
+        onOpenDetails={onOpenSiteDetail}
+      />
 
       {/* C. Tasks / Checklist Section */}
       <section className="bg-[#141713] rounded-[20px] p-4 border border-[#34332D] space-y-3">

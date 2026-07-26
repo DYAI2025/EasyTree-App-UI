@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bell, WifiOff } from 'lucide-react';
+import { Bell, WifiOff, Sun, Moon } from 'lucide-react';
 
 interface TopBarProps {
   userName: string;
@@ -7,6 +7,8 @@ interface TopBarProps {
   unreadCount: number;
   isOffline: boolean;
   lastSynced: string;
+  isDarkMode?: boolean;
+  onToggleDarkMode?: () => void;
   onOpenNotifications: () => void;
   onOpenProfile: () => void;
 }
@@ -17,6 +19,8 @@ export const TopBar: React.FC<TopBarProps> = ({
   unreadCount,
   isOffline,
   lastSynced,
+  isDarkMode = true,
+  onToggleDarkMode,
   onOpenNotifications,
   onOpenProfile
 }) => {
@@ -39,24 +43,40 @@ export const TopBar: React.FC<TopBarProps> = ({
         </div>
       </div>
 
-      {/* Right Section: Sync Status & Bell Button */}
-      <div className="flex items-center gap-2.5">
+      {/* Right Section: Sync Status, Theme Toggle & Bell Button */}
+      <div className="flex items-center gap-2">
         {isOffline ? (
           <div className="flex items-center gap-1 bg-[#B8413D]/20 border border-[#B8413D]/40 text-[#F1E8DC] text-[10px] px-2 py-1 rounded-lg">
             <WifiOff className="w-3 h-3 text-[#B8413D]" />
             <span className="font-mono text-[#B8413D]">Offline</span>
           </div>
         ) : (
-          <div className="flex flex-col items-end leading-tight">
+          <div className="flex flex-col items-end leading-tight mr-0.5">
             <span className="text-[9px] uppercase font-mono text-[#7D8B55] font-semibold">Online ●</span>
             <span className="text-[9px] text-[#918577] font-mono">{lastSynced} Sync</span>
           </div>
         )}
 
+        {/* Theme Toggle Switch Button */}
+        {onToggleDarkMode && (
+          <button
+            onClick={onToggleDarkMode}
+            className="w-8 h-8 rounded-lg bg-[#1C201C] flex items-center justify-center border border-[#34332D] text-[#D6A875] hover:text-[#F1E8DC] hover:border-[#D6A875]/60 transition-all cursor-pointer active:scale-95"
+            aria-label={isDarkMode ? 'Zu Hellmodus umschalten' : 'Zu Dunkelmodus umschalten'}
+            title={isDarkMode ? 'Hellmodus aktivieren (#E9F4EA)' : 'Dunkelmodus aktivieren'}
+          >
+            {isDarkMode ? (
+              <Sun className="w-4 h-4 text-[#D6A875]" />
+            ) : (
+              <Moon className="w-4 h-4 text-[#3B4A3B]" />
+            )}
+          </button>
+        )}
+
         {/* Bell Button */}
         <button
           onClick={onOpenNotifications}
-          className="relative w-8 h-8 rounded-lg bg-[#1C201C] flex items-center justify-center border border-[#34332D] text-[#C2B3A0] hover:text-[#F1E8DC] hover:border-[#D6A875]/40 transition-colors"
+          className="relative w-8 h-8 rounded-lg bg-[#1C201C] flex items-center justify-center border border-[#34332D] text-[#C2B3A0] hover:text-[#F1E8DC] hover:border-[#D6A875]/40 transition-colors cursor-pointer active:scale-95"
           aria-label={`Benachrichtigungen (${unreadCount} ungelesen)`}
         >
           <Bell className="w-4 h-4" />
@@ -70,4 +90,5 @@ export const TopBar: React.FC<TopBarProps> = ({
     </header>
   );
 };
+
 

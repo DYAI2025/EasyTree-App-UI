@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @layer base {
-  :root {
+  :root, .dark {
     --surface-canvas: #050505;
     --surface-app: #0B0C0B;
     --surface-shell: #141713;
@@ -33,12 +33,98 @@
     --accent-information: #5B7E86;
   }
 
+  .light {
+    --surface-canvas: #D1E5D3;
+    --surface-app: #E9F4EA;        /* User requested light background */
+    --surface-shell: #CDE7CC;      /* Shell/Header background */
+    --surface-panel: #FFFFFF;      /* Clean crisp cards */
+    --surface-raised: #D9ECD8;     /* Raised elements/pills */
+    --surface-hover: #C2E2C0;      /* Hover states */
+
+    --wood-gold: #8A521A;          /* High contrast warm amber in light mode */
+    --wood-amber: #9E5D1D;
+    --wood-birch: #2D3D2D;
+    --wood-walnut: #4A3322;
+    --wood-oak: #382A1F;
+
+    --border-groove: #A8CFA7;
+    --border-subtle: #97B89A;      /* Palette border color */
+    --border-wood: #6E8B6E;
+
+    --text-primary: #182418;        /* Deep charcoal forest for maximum contrast */
+    --text-secondary: #3B4A3B;      /* Secondary dark slate from palette */
+    --text-muted: #516651;          /* Muted legible forest green */
+    --text-on-gold: #FFFFFF;
+
+    --accent-forest: #386641;
+    --accent-moss: #425B2F;
+    --accent-amber: #9E5D1D;
+    --accent-red: #A82E2B;
+    --accent-red-border: #82221F;
+    --accent-green-border: #2B4E33;
+    --accent-information: #23525D;
+  }
+
   body {
     background-color: var(--surface-canvas);
     color: var(--text-primary);
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
+}
+
+/* Light mode component & utility overrides for clear contrast */
+.light {
+  background-color: #E9F4EA !important;
+  color: #182418 !important;
+}
+
+/* Backgrounds in light mode */
+.light .bg-\[\#050505\] { background-color: #D1E5D3 !important; }
+.light .bg-\[\#0B0C0B\] { background-color: #E9F4EA !important; } /* Main app background */
+.light .bg-\[\#141713\] { background-color: #CDE7CC !important; } /* Shells / Header / Sub-panels */
+.light .bg-\[\#1C201C\] { background-color: #FFFFFF !important; } /* Cards */
+.light .bg-\[\#272822\] { background-color: #D9ECD8 !important; } /* Inputs / Inset boxes */
+.light .bg-\[\#303129\] { background-color: #C2E2C0 !important; } /* Active / Hover */
+.light .bg-\[\#080908\] { background-color: #A8CFA7 !important; }
+
+/* Text colors in light mode */
+.light .text-\[\#F1E8DC\] { color: #182418 !important; } /* Primary text -> Charcoal Forest */
+.light .text-\[\#C2B3A0\] { color: #3B4A3B !important; } /* Secondary text -> Palette #3B4A3B */
+.light .text-\[\#918577\] { color: #516651 !important; } /* Muted text -> Legible Green */
+.light .text-\[\#E8D2B5\] { color: #2D3D2D !important; }
+.light .text-\[\#D6A875\] { color: #8A521A !important; } /* Wood gold accent -> High contrast warm amber */
+.light .text-\[\#C48A4A\] { color: #9E5D1D !important; }
+
+/* Border colors in light mode */
+.light .border-\[\#34332D\] { border-color: #97B89A !important; }
+.light .border-\[\#080908\] { border-color: #A8CFA7 !important; }
+.light .border-\[\#4A3B2F\] { border-color: #6E8B6E !important; }
+.light .border-\[\#D6A875\]\/60 { border-color: rgba(138, 82, 26, 0.6) !important; }
+.light .border-\[\#D6A875\]\/50 { border-color: rgba(138, 82, 26, 0.5) !important; }
+.light .border-\[\#D6A875\]\/40 { border-color: rgba(138, 82, 26, 0.4) !important; }
+
+/* Buttons & Badges in light mode */
+.light .bg-\[\#55735B\] { background-color: #386641 !important; color: #FFFFFF !important; }
+.light .bg-\[\#D6A875\] { background-color: #3B4A3B !important; color: #FFFFFF !important; }
+.light .bg-\[\#D6A875\] .text-\[\#2B211A\] { color: #FFFFFF !important; }
+.light .bg-\[\#7D8B55\] { background-color: #425B2F !important; color: #FFFFFF !important; }
+
+/* Weather & Alert boxes in light mode */
+.light .bg-\[\#281414\] { background-color: #FFF0F0 !important; border-color: #A82E2B !important; }
+.light .bg-\[\#B8413D\] { background-color: #A82E2B !important; color: #FFFFFF !important; }
+.light .bg-\[\#B8413D\]\/20 { background-color: rgba(168, 46, 43, 0.12) !important; }
+.light .bg-\[\#B8413D\]\/30 { background-color: rgba(168, 46, 43, 0.22) !important; }
+.light .bg-\[\#3D1A1A\] { background-color: #FFE5E5 !important; }
+.light .bg-\[\#2B211A\] { background-color: #FFF5EA !important; border-color: #9E5D1D !important; }
+.light .bg-\[\#1F1010\] { background-color: #FFF0F0 !important; }
+.light .bg-\[\#1C272C\] { background-color: #E6F3F5 !important; }
+
+/* Bottom Nav in light mode */
+.light nav {
+  background-color: #CDE7CC !important;
+  border-top-color: #97B89A !important;
 }
 
 /* Wood grain subtle background texture pattern */
@@ -53,14 +139,14 @@
 }
 
 .charred-wood-card {
-  background: #1C201C;
-  border: 1px solid #34332D;
+  background: var(--surface-panel);
+  border: 1px solid var(--border-subtle);
   border-radius: 20px;
 }
 
 .charred-wood-panel {
-  background: #141713;
-  border: 1px solid #34332D;
+  background: var(--surface-shell);
+  border: 1px solid var(--border-subtle);
   border-radius: 20px;
 }
 
@@ -79,16 +165,17 @@
   border-bottom-left-radius: inherit;
 }
 
-/* Custom scrollbar styling for compact mobile containers */
+/* Custom scrollbar styling */
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #141713;
+  background: var(--surface-shell);
 }
 ::-webkit-scrollbar-thumb {
-  background: #34332D;
+  background: var(--border-subtle);
   border-radius: 2px;
 }
+
 
